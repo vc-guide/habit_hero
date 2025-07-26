@@ -12,3 +12,16 @@ class RegisterSerializer(serializers.ModelSerializer):
     user = User.objects.create_user(**validated_data)
     
     return user
+  
+class HabitlogSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Habitlog
+    fields = ['id', 'habit', 'date', 'status','description']
+    
+class HabitSerializer(serializers.ModelSerializer):
+  logs = HabitlogSerializer(many = True, read_only=True)
+  
+  class Meta:
+    model = Habit
+    fields = ['id', 'habit_name','habit_frequency', 'habit_category','habit_start_date', 'logs']
+  

@@ -1,15 +1,15 @@
 import React from 'react'
-import {Grid, Avatar, TextField, FormControlLabel, Checkbox, Button, Link, Paper, Tabs, Tab, Typography, Box} from '@mui/material';
+import {Grid, Avatar, TextField, Button, Paper, Tabs, Tab, Typography, Box} from '@mui/material';
 import { IoIosLock } from "react-icons/io";
 import { RiUserFill } from "react-icons/ri";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { RiMailFill } from "react-icons/ri";
-import { RiPhoneFill } from "react-icons/ri";
 import { useTheme } from '@mui/material/styles';
-import {useState} from 'react';
+import {useState, useContext} from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import { AuthContext } from './AuthProvider';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -46,7 +46,7 @@ function a11yProps(index) {
 
 
 const Login = () => {
-
+  const {isLoggedIn, setIsLoggedIn} = useContext(AuthContext)
   const theme = useTheme();
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
@@ -113,6 +113,7 @@ const Login = () => {
       console.log(response.data);
       localStorage.setItem('accessToken', response.data.access)
       localStorage.setItem('refreshToken', response.data.refresh)
+      setIsLoggedIn(true);
       alert("Login successful!");
       navigate('home/');
       

@@ -9,7 +9,7 @@ import CreateHabit from './components/CreateHabit.jsx';
 createRoot(document.getElementById('root')).render(
   <Router>
     <StrictMode>
-      <CreateHabit/>
+      <App/>
     </StrictMode>
   </Router>
 )
