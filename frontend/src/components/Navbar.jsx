@@ -27,13 +27,16 @@ const Navbar = () => {
         <Toolbar>
           
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            HABIT HERO
+           <strong> HABIT HERO</strong>
           </Typography>
-          <Link to="/createhabit"><Button color="inherit">Create Habit</Button></Link>
-          <Link to="/habittracker"><Button color="inherit">Track Habit</Button></Link>
-          <Link to="/viewhabits"><Button color="inherit">view Habits</Button></Link>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+          <Link to="/home"><Button  variant="contained">Home</Button></Link>
+          <Link to="/createhabit"><Button variant="contained" >Create Habit</Button></Link>
+          <Link to="/habittracker"><Button variant="contained" >Track Habit</Button></Link>
+          <Link to="/viewhabits"><Button variant="contained" >view Habits</Button></Link>
           { isLoggedIn && 
-          <Button color="inherit" onClick={handleLogout}>Logout</Button>}
+          <Button  variant="contained" onClick={handleLogout}>Logout</Button>}
+          </Box>
         </Toolbar>
       </AppBar>
     </Box>

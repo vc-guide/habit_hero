@@ -13,4 +13,5 @@ urlpatterns = [
   path('habitview/',HabitView.as_view()),
   path('viewhabit/', HabitTodayView.as_view(),),
   path('habitlog/', HabitUpdateView.as_view()),
+  path('habithistory/<int:habit_id>/', HabitHistoryView.as_view()),
 ]

@@ -5,10 +5,17 @@ import { Typography, Grid, Card, TextField, Container, Button} from '@mui/materi
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 const HabitTracker = () => {
 
   const [habitData, setHabitData] = useState([]);
+  const [alert, setAlert] = useState(false);
+    const handleClose = (event, reason) => {
+      if (reason === 'clickaway') return;
+      setAlert(false);
+      };
   
   useEffect(()=>{
     const accessToken = localStorage.getItem('accessToken')
@@ -28,7 +35,8 @@ const HabitTracker = () => {
       .then((response)=>{
       setHabitData(response.data.map(h=>({
         ...h, description: '',
-        checked: h.status==='completed'
+        checked: h.status==='completed',
+        isSubmitted: false
       })));
     })
     .catch((error)=>{
@@ -63,7 +71,10 @@ const HabitTracker = () => {
       }
     })
       .then((res) => {
-        alert(`Habit "${habit.name}" updated successfully`);
+        setAlert(true);
+        setHabitData(prev => prev.map(h =>
+        h.id === habit.id ? { ...h, isSubmitted: true } : h
+      ));
       })
       .catch((err) => {
         console.error(err);
@@ -73,6 +84,9 @@ const HabitTracker = () => {
   let today = new Date();
   return (
     <div style={{width: '100%'}}>
+       <Snackbar open={alert} autoHideDuration={3000} onClose={handleClose}>
+          <Alert severity="success" onClose={handleClose}>Updated successfull</Alert>
+        </Snackbar>
       {habitData && habitData.map((item,index)=>(
         <Card key={index} sx={{margin:"20px auto", padding: '2rem', width: "70%"}} elevation={10}>
           <div style={{margin:"-15px 0 10px 23px"}}><strong>{today.toDateString()}</strong></div>
@@ -106,7 +120,7 @@ const HabitTracker = () => {
                   style={{width:"80%"}}
                 />
                 
-                   <Button size="small" color="success" variant='contained' onClick={() => handleSubmit(item)}>Submit</Button>
+                   <Button size="small" color="success" variant='contained' onClick={() => handleSubmit(item)} disabled={item.isSubmitted}>{item.isSubmitted ? 'Submitted': 'Submit'}</Button>
                  
               </Grid>
           </Grid>

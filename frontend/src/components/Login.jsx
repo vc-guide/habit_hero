@@ -130,7 +130,7 @@ const Login = () => {
 
   const paperStyle = { height: '400px', width: '340px', margin: '0 auto'};
   const boxstyle = {display:'flex', alignItems:'center', gap:2};
-  const avatarStyle = { backgroundColor: '#fab800', width:'1.7rem', height: '1.7rem'};    
+  const avatarStyle = { backgroundColor: 'blue', width:'1.7rem', height: '1.7rem'};    
   
   return (
      <div style={{display:'flex', justifyContent:'center'}}>
@@ -139,7 +139,7 @@ const Login = () => {
          <Tabs
           value={value}
           onChange={handleChange}
-          TabIndicatorProps={{style: {backgroundColor: '#fab800'}}}
+          TabIndicatorProps={{style: {backgroundColor: 'blue'}}}
           textColor="inherit"
           variant="fullWidth"
           aria-label="full width tabs example"

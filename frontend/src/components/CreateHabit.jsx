@@ -9,6 +9,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 
 const CreateHabit = () => {
@@ -30,6 +33,12 @@ const CreateHabit = () => {
   const [date, setDate] = useState(null)
   const accessToken = localStorage.getItem("accessToken");
 
+  const navigate = useNavigate()
+  const [alert, setAlert] = useState(false);
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') return;
+    setAlert(false);
+    };
 
   const handleSubmit= async(e)=>{
     e.preventDefault();
@@ -48,6 +57,12 @@ const CreateHabit = () => {
           }
         })
         console.log('habitadd successfull', response.data)
+        setAlert(true)
+
+        setHabitName('');
+        setFrequency('');
+        setCategory('');
+        
       }
       catch(error){
         console.error('error',error.response?.data || error.message)
@@ -58,6 +73,11 @@ const CreateHabit = () => {
 
   return (
     <div style={maincontainer}>
+      <div>
+        <Snackbar open={alert} autoHideDuration={3000} onClose={handleClose}>
+         <Alert severity="success" onClose={handleClose}>Habit created successfull</Alert>
+        </Snackbar>
+      </div>
     <Card elevation={10} sx={{padding: '2rem'}}>
         <Typography variant="h5" align='center'>
           Add Habit details here
@@ -100,14 +120,16 @@ const CreateHabit = () => {
                   </FormControl>
               </Grid>
               <Grid size={{xs:12, sm:6}}>
-                <div><h3>Select the start date</h3></div>
+                <Typography style={{marginTop:"1.2rem", display: 'flex', justifyContent: 'center', alignItems: 'center'}}><strong>Select the start Date</strong></Typography>
+              </Grid>
+              <Grid size={{xs:12,sm:6}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer components={['DatePicker']}>
                     <DatePicker label="Select date" value={date} onChange={(newdate)=>setDate(newdate)} />
                   </DemoContainer>
                 </LocalizationProvider>
               </Grid>
-              <Grid size={{xs:12, sm:6}}  >
+              <Grid size={{xs:12}}  >
                  <Button variant="contained" color='primary' type="submit"  fullWidth>Submit</Button>
               </Grid> 
             </Grid>

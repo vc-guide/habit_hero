@@ -1,11 +1,12 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 import axios from 'axios'
-import { Card,CardContent, Grid, Typography } from '@mui/material';
-
+import { Button, Card,CardContent, Grid, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 const HabitDisplay = () => {
 
   const [habitData, setHabitData] = useState([])
+  const navigate = useNavigate();
 
   useEffect(()=>{
     const accessToken = localStorage.getItem('accessToken');
@@ -50,6 +51,7 @@ const HabitDisplay = () => {
                 year: 'numeric'
               })}
               </Typography>
+              <Button variant="contained" onClick={()=>navigate(`/habithistory/${item.id}`)}>Habit History</Button>
             </Card>
           </Grid>
           ))}

@@ -9,6 +9,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from datetime import date, timedelta
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 class RegisterView(generics.CreateAPIView):
@@ -90,3 +91,12 @@ class HabitUpdateView(APIView):
     log.save()
     
     return Response({"message": "Habit log updated"}, status =200)
+  
+class HabitHistoryView(APIView):
+  permission_classes = [IsAuthenticated]
+  
+  def get(self,request, habit_id):
+    habit = get_object_or_404(Habit, id=habit_id, user = request.user)
+    logs = Habitlog.objects.filter(habit=habit).order_by('-date')
+    serializer = HabitlogSerializer(logs, many=True)
+    return Response(serializer.data)
