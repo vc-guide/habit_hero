@@ -31,6 +31,7 @@ const Navbar = () => {
           </Typography>
           <Link to="/createhabit"><Button color="inherit">Create Habit</Button></Link>
           <Link to="/habittracker"><Button color="inherit">Track Habit</Button></Link>
+          <Link to="/viewhabits"><Button color="inherit">view Habits</Button></Link>
           { isLoggedIn && 
           <Button color="inherit" onClick={handleLogout}>Logout</Button>}
         </Toolbar>

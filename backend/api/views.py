@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from datetime import date, timedelta
 
 # Create your views here.
 class RegisterView(generics.CreateAPIView):
@@ -38,24 +39,34 @@ class HabitTodayView(APIView):
     user= request.user
     today_str = request.query_params.get('date')
     today = date.fromisoformat(today_str) if today_str else date.today()
+    weekday_today = today.weekday()
     
     habits = Habit.objects.filter(user=user)
     response_data = []
     
     for habit in habits:
-      try: 
-        log= Habitlog.objects.get(habit=habit, date=today)
-        status = log.status
-      except Habitlog.DoesNotExist:
-        status = 'not_completed'
-        
-      response_data.append({
-        'id' : habit.id,
-        'name': habit.habit_name,
-        'status': status,
-        'date' : today.isoformat(),
-      })
+      if habit.habit_start_date > today:
+        continue
       
+      if habit.habit_frequency == "daily":
+        pass
+      elif habit.habit_frequency == "weekly":
+        if habit.habit_start_date.weekday() != weekday_today:
+          continue
+        
+        week_start = today - timedelta(days=today.weekday())
+        week_end = week_start + timedelta(days=6)
+        if Habitlog.objects.filter(habit=habit, date__range=(week_start, week_end)).exists():
+          continue
+        
+      log = Habitlog.objects.filter(habit=habit, date=today).first()
+
+      response_data.append({
+          'id': habit.id,
+          'name': habit.habit_name,
+          'status': log.status if log else "not_completed",
+      })
+  
     return Response(response_data)
   
 class HabitUpdateView(APIView):
@@ -65,11 +76,11 @@ class HabitUpdateView(APIView):
     user = request.user
     habit_id = request.data.get('habit_id')
     status_val = request.data.get('status')
-    description = request.data.get('note', '')
+    description = request.data.get('description', '')
     log_date = request.data.get('date', str(date.today()))
     
     try:
-      habit = Habit.objects.get(id=habit.id, user = user)
+      habit = Habit.objects.get(id=habit_id, user = user)
     except Habit.DoesNotExist:
       return Response({"error": "Habit not found"}, status = 404)
     

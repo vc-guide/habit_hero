@@ -80,9 +80,6 @@ const HabitTracker = () => {
               <Grid size={{xs:12, sm: 6}}>
                <Container>
                 <Typography variant='h4'>{item.name}</Typography>
-              
-
-              
                 <FormGroup>
                   <FormControlLabel control={<Checkbox checked={item.checked} onChange={()=>handleCheckboxChange(index)} size="small"/>} label="Mark to complete" />
                 </FormGroup>

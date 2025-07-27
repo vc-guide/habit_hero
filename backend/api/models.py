@@ -6,7 +6,7 @@ from datetime import date
 class Habit(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   habit_name = models.CharField(max_length = 150)
-  habit_frequency = models.CharField(max_length = 100)
+  habit_frequency = models.CharField(max_length = 100, choices=(("daily", "Daily"), ("weekly", "Weekly")))
   habit_category = models.CharField(max_length =  100)
   habit_start_date = models.DateField()
   
